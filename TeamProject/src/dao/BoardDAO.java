@@ -104,7 +104,7 @@ public class BoardDAO {
 	//
 	//
 	//
-	//
+	//  글 작성
 	
 	public int insertArticle(BoardBean bb) {
 		int insertCount = 0;
@@ -120,11 +120,15 @@ public class BoardDAO {
 			pstmt.setInt(6, bb.getBoardReRef()); pstmt.setInt(7, 0); pstmt.setInt(8, 0); pstmt.setInt(9, 0);
 			pstmt.setInt(10, bb.getBookID());
 			
-			int update = pstmt.executeUpdate();
-			if(update != 0) {
-				bb.setBoardNum(maxNum);
-				
-				insertCount = insertFile(bb, kID);
+			if(bb.getFile() == null) {
+				insertCount = pstmt.executeUpdate();
+			} else {
+				int update = pstmt.executeUpdate();
+				if(update != 0) {
+					bb.setBoardNum(maxNum);
+					
+					insertCount = insertFile(bb, kID);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -166,7 +170,8 @@ public class BoardDAO {
 	
 	//
 	//
-	
+	//-------------------------------------------------------------------------------
+	// 글 내용 보는 메서드들
 	
 	public BoardBean selectArticle(int boardNum, String k1) {
 		BoardBean bb = null;
@@ -222,6 +227,8 @@ public class BoardDAO {
 		return file;
 	}
 	
+	
+	
 	// 조회수 증가 메서드
 	public int increaseReadCount(int boardNum, int kID) {
 		int updateCount = 0;
@@ -243,7 +250,7 @@ public class BoardDAO {
 	
 	//
 	//
-	//
+	// 글 수정하는 메서드들
 
 	public int updateArticle(BoardBean bb) {
 		int updateCount = 0;
@@ -266,6 +273,13 @@ public class BoardDAO {
 		return updateCount;
 	}
 
+	
+	
+	
+	//
+	//
+	// 글 삭제하는 메서드들
+	
 	public int deleteArticle(int boardNum, String k1) {
 		int deleteCount = 0;
 		int kID = get_kID(boardNum, k1);
@@ -290,14 +304,22 @@ public class BoardDAO {
 		return deleteCount;
 	}
 
-	private int deleteFile(int boardNum, int kID) {
+	public int deleteFile(int boardNum, int kID) {
 		int deleteCount = 0;
 		
-		String sql = "DELETE FROM fileBoard WHERE board_boardNum=? AND board_kID=?";
+		String sql = "SELECT * FROM fileBoard WHERE board_boardNum=? AND board_kID=?";
 		try {
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
-			deleteCount = pstmt.executeUpdate();
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				sql = "DELETE FROM fileBoard WHERE board_boardNum=? AND board_kID=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
+				deleteCount = pstmt.executeUpdate();
+			} else {
+				deleteCount = 1;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

@@ -49,7 +49,10 @@ public class NoticeWriteProAction implements Action {
 				String boardContent = multi.getParameter("boardContent");
 				String boardWriter = multi.getParameter("boardWriter");
 				
-				FileBean file = new  FileBean(originFilename, storedFileName, fileType);
+				FileBean file = null;
+				if(originFilename != null) {
+					file = new  FileBean(originFilename, storedFileName, fileType);
+				}
 				// BoardBean 에 파라미터 저장 및 생성
 				BoardBean bb = new BoardBean(k1, k2, k3, boardWriter, boardTitle, boardContent, file);
 		

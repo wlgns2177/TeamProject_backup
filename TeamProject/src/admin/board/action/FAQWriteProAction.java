@@ -49,7 +49,10 @@ public class FAQWriteProAction implements Action {
 		String boardContent = multi.getParameter("boardContent");
 		String boardWriter = multi.getParameter("boardWriter");
 		
-		FileBean file = new  FileBean(originFilename, storedFileName, fileType);
+		FileBean file = null;
+		if(originFilename != null) {
+			file = new  FileBean(originFilename, storedFileName, fileType);
+		}
 		// BoardBean 에 파라미터 저장 및 생성
 		BoardBean bb = new BoardBean(k1, k2, k3, boardWriter, boardTitle, boardContent, file);
 		
@@ -60,8 +63,9 @@ public class FAQWriteProAction implements Action {
 		
 		
 		forward = new ActionForward();
+		// FAQ 는 작성한 것을 바로 리스트에서 볼 수 있도록 리스트로 이동한다.
 		// FAQ 작성한거 상세보기
-		forward.setPath("./FAQDetail.adb?num"+boardNum);
+		forward.setPath("./FAQList.adb");
 		forward.setRedirect(true);
 		
 		return forward;
