@@ -57,6 +57,10 @@ public class QWriteProAction implements Action {
 		}
 		// BoardBean 에 파라미터 저장 및 생성
 		BoardBean bb = new BoardBean(k1, k2, k3, boardWriter, boardTitle, boardContent, file);
+//		BoardBean bb = new BoardBean(
+//				boardNum, k1, k2, k3, boardWriter, boardTitle, boardContent, boardRegTime,
+//				boardReRef, boardReLev, boardReSeq, boardReadcount, bookID
+//				);
 		
 		// 작성자 답변 등록 method()
 		QWriteProService q_WriteProService = new QWriteProService();
