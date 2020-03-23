@@ -1,13 +1,13 @@
 package vo;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class BoardBean {
 	
 	private int boardNum;
 	private String k1;
 	private String k2;
-	private String k3;
 	
 	private String boardWriter;
 	private String boardTitle;
@@ -19,43 +19,19 @@ public class BoardBean {
 	private int boardReadcount;
 	private int bookID;
 	
-	private FileBean file;
+	private List<FileBean> fileList;
 	
 	public BoardBean() {}
-
-	// QnA 관련 작업에 사용할 생성자
-	public BoardBean(String k1, String k2, String k3, String boardWriter, String boardTitle, String boardContent, FileBean file) {
-		super();
-		this.k1 = k1;
-		this.k2 = k2;
-		this.k3 = k3;
-		this.boardWriter = boardWriter;
-		this.boardTitle = boardTitle;
-		this.boardContent = boardContent;
-		this.file = file;
-	}
-
+	
 	
 
-	// 게시물 수정을 위해 사용되는 BoardBean객체의 생성자
-	public BoardBean(int boardNum, String k1, String boardTitle, String boardContent, FileBean file) {
-		super();
-		this.boardNum = boardNum;
-		this.k1 = k1;
-		this.boardTitle = boardTitle;
-		this.boardContent = boardContent;
-		this.file = file;
-	}
-
-	// 모든 정보를 한번에 BoardBean 객체에 담기위한 생성자
-	public BoardBean(int boardNum, String k1, String k2, String k3, String boardWriter, String boardTitle,
-			String boardContent, Timestamp boardRegTime, int boardReRef, int boardReLev, int boardReSeq,
-			int boardReadcount, int bookID) {
+	public BoardBean(int boardNum, String k1, String k2, String boardWriter, String boardTitle, String boardContent,
+			Timestamp boardRegTime, int boardReRef, int boardReLev, int boardReSeq, int boardReadcount, int bookID,
+			List<FileBean> fileList) {
 		super();
 		this.boardNum = boardNum;
 		this.k1 = k1;
 		this.k2 = k2;
-		this.k3 = k3;
 		this.boardWriter = boardWriter;
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
@@ -65,30 +41,12 @@ public class BoardBean {
 		this.boardReSeq = boardReSeq;
 		this.boardReadcount = boardReadcount;
 		this.bookID = bookID;
+		this.fileList = fileList;
 	}
 
 
-	// ===============================================================================
-
-	
 	public int getBoardNum() {
 		return boardNum;
-	}
-
-	public FileBean getFile() {
-		return file;
-	}
-
-	public void setFile(FileBean file) {
-		this.file = file;
-	}
-
-	public String getBoardWriter() {
-		return boardWriter;
-	}
-
-	public void setBoardWriter(String boardWriter) {
-		this.boardWriter = boardWriter;
 	}
 
 	public void setBoardNum(int boardNum) {
@@ -111,12 +69,12 @@ public class BoardBean {
 		this.k2 = k2;
 	}
 
-	public String getK3() {
-		return k3;
+	public String getBoardWriter() {
+		return boardWriter;
 	}
 
-	public void setK3(String k3) {
-		this.k3 = k3;
+	public void setBoardWriter(String boardWriter) {
+		this.boardWriter = boardWriter;
 	}
 
 	public String getBoardTitle() {
@@ -182,8 +140,14 @@ public class BoardBean {
 	public void setBookID(int bookID) {
 		this.bookID = bookID;
 	}
+
+	public List<FileBean> getFileList() {
+		return fileList;
+	}
+
+	public void setFileList(List<FileBean> fileList) {
+		this.fileList = fileList;
+	}
+
 	
-	
-	
-	
-}
+}	
