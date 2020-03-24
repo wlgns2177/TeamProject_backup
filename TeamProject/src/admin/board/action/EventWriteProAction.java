@@ -14,16 +14,15 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
 import admin.board.svc.BoardService;
-import board.svc.QWriteProService;
 import vo.ActionForward;
 import vo.BoardBean;
 import vo.FileBean;
 
-public class QWriteProAction implements Action {
+public class EventWriteProAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-ActionForward forward = null;
+		ActionForward forward = null;
 		
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";
@@ -80,8 +79,7 @@ ActionForward forward = null;
 		int insertCount = boardService.writeArticle(bb);
 		
 		forward = new ActionForward();
-		// 1:1 답변 작성한거 상세보기
-//		forward.setPath("./board/QDetail.jsp");
+		// Event 포워드 지정
 		
 		return forward;
 	}

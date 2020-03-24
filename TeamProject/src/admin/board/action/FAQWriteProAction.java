@@ -13,6 +13,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
+import admin.board.svc.BoardService;
 import admin.board.svc.FAQWriteProService;
 import vo.ActionForward;
 import vo.BoardBean;
@@ -52,11 +53,13 @@ public class FAQWriteProAction implements Action {
 			file = new FileBean(originFilename, storedFileName, fileType);
 			fileList.add(file);
 		}
-		// 글 번호 들고오기
-		int boardNum = 0;
+		// DB작업을 위해 서비스 객체 생성
+		BoardService boardService = new BoardService();
 		// 카테고리 관련
 		String k1 = multi.getParameter("k1");
 		String k2 = multi.getParameter("k2");
+		// 글 번호 들고오기
+		int boardNum = boardService.getMaxNum(k1) + 1;
 		
 		// 제목과 내용, 작성자
 		String boardWriter = multi.getParameter("boardWriter");
@@ -74,7 +77,7 @@ public class FAQWriteProAction implements Action {
 		bb = new BoardBean(boardNum, k1, k2, boardWriter, boardTitle, boardContent, boardRegTime, boardReRef, boardReLev, boardReSeq, boardReadcount, bookID, fileList);
 		
 		// BoardBean 객체를 전달하여 서비스의 writeArticle() 메서드를 실행하여  DB에 글을 삽입하고, 성공 시 1을 반환받는다, 실패시 0을 반환
-		
+		int insertCount = boardService.writeArticle(bb);
 		
 		
 		forward = new ActionForward();
