@@ -226,27 +226,27 @@ public class BoardDAO {
 	
 	
 	
-	public int get_kID(int boardNum, String k1) {
-		int kID = -1;
-		
-		String sql = "SELECT b.kID FROM board b JOIN kategorie k ON b.kID=k.kID WHERE b.boardNum=? AND k.k1=?";
-		try {
-			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, boardNum); pstmt.setString(2, k1);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				kID = rs.getInt("b.kID");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rs); close(pstmt);
-		}
-		
-		
-		return kID;
-	}
+//	public int get_kID(int boardNum, String k1) {
+//		int kID = -1;
+//		
+//		String sql = "SELECT b.kID FROM board b JOIN kategorie k ON b.kID=k.kID WHERE b.boardNum=? AND k.k1=?";
+//		try {
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setInt(1, boardNum); pstmt.setString(2, k1);
+//			rs = pstmt.executeQuery();
+//			
+//			if(rs.next()) {
+//				kID = rs.getInt("b.kID");
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			close(rs); close(pstmt);
+//		}
+//		
+//		
+//		return kID;
+//	}
 	
 	// 조회수 증가 메서드
 		public int increaseReadCount(int boardNum, int kID) {
