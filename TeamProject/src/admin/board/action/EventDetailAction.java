@@ -5,15 +5,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import action.Action;
 import admin.board.svc.BoardService;
-import admin.board.svc.QDetailService;
 import vo.ActionForward;
 import vo.BoardBean;
 
-public class QDetailAction implements Action {
+public class EventDetailAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-ActionForward forward = null;
+		ActionForward forward = null;
 		
 		int boardNum = Integer.parseInt(request.getParameter("boardNum"));
 		// 서블릿에 리퀘스트 객체로 카테고리 정보를 포함되어있다고 가정

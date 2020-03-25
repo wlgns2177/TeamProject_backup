@@ -44,7 +44,7 @@ public class FAQWriteProAction implements Action {
 			// 파일명 들고오기
 			String originFilename = multi.getOriginalFileName(name); //  원본 파일명, 보여지는 파일명이다.
 			String storedFileName = multi.getFilesystemName(name); // 저장되는 파일명, 중복처리를 거친 후 의 파일명이다.
-
+			
 			System.out.println("원본 파일명(보여지는 이름) : " + originFilename);
 			System.out.println("저장된 파일명(중복처리) : " + storedFileName);
 

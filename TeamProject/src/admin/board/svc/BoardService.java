@@ -7,6 +7,8 @@ import static db.JdbcUtil.rollback;
 
 import java.sql.Connection;
 
+import org.apache.catalina.startup.SetContextPropertiesRule;
+
 import dao.BoardDAO;
 import vo.BoardBean;
 
@@ -71,6 +73,25 @@ public class BoardService {
 		
 		return bb;
 	}
+
+	public int deleteArticle(int boardNum, String k1, String k2) {
+		System.out.println("BoardService의 deleteArticle() 메서드");
+		
+		BoardBean bb = null;
+		Connection con = null;
+		
+		BoardDAO boardDAO = BoardDAO.getInstance();
+		con = getConnection();
+		
+		boardDAO.setConnection(con);
+		
+		int deleteCount = 0;
+		deleteCount = boardDAO.deleteArticle(boardNum, k1, k2);
+		
+		return 0;
+	}
+
+	
 
 	
 	

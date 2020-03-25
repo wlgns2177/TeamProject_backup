@@ -248,7 +248,24 @@ public class BoardDAO {
 		return kID;
 	}
 	
-	
+	// 조회수 증가 메서드
+		public int increaseReadCount(int boardNum, int kID) {
+			int updateCount = 0;
+			
+			String sql = "UPDATE board SET readCount=readCount+1 WHERE boardNum=? AND kID=?";
+			
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
+				updateCount = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(pstmt);
+			}
+			
+			return updateCount;
+		}
 	
 	
 	
@@ -261,28 +278,58 @@ public class BoardDAO {
 	//-------------------------------------------------------------------------------
 	// 글 내용 보는 메서드들
 	
+	// 글 삭제하는 메서드들
 	
-	
-	
-	
-	// 조회수 증가 메서드
-	public int increaseReadCount(int boardNum, int kID) {
-		int updateCount = 0;
-		
-		String sql = "UPDATE board SET readCount=readCount+1 WHERE boardNum=? AND kID=?";
-		
-		try {
-			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
-			updateCount = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
+		public int deleteArticle(int boardNum, String k1, String k2) {
+			int deleteCount = 0;
+			int kID = get_kID(k1, k2);
+			
+			List<FileBean> fileList = selectFileList(boardNum, kID);
+			
+			if(fileList.size() > 0) {
+				int deleteFile = deleteAllFile(boardNum, kID);
+				if(deleteFile == 0) {
+					return 0;
+				}
+			}
+			String sql = "DELETE FROM board WHERE boardNum=? AND kID=?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
+				
+				int delete = pstmt.executeUpdate();
+				if(delete != 0) {
+					deleteCount = deleteFile(boardNum, kID);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(pstmt);
+			}
+			return deleteCount;
 		}
-		
-		return updateCount;
-	}
+	
+		public int deleteAllFile(int boardNum, int kID) {
+			int deleteFile = 0;
+			
+			String sql = "DELETE FROM boardFile WHERE board_boardNum=? AND board_kID=?";
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
+				
+				deleteFile = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(pstmt);
+			}
+			
+			return deleteFile;
+		}
+	
+	
+	
+	
 	
 	//
 	//
@@ -312,33 +359,7 @@ public class BoardDAO {
 	
 	
 	
-	//
-	//
-	// 글 삭제하는 메서드들
 	
-	public int deleteArticle(int boardNum, String k1) {
-		int deleteCount = 0;
-		int kID = get_kID(boardNum, k1);
-		
-		String sql = "DELETE FROM board WHERE boardNum=? AND kID=?";
-		try {
-			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
-			
-			int delete = pstmt.executeUpdate();
-			if(delete != 0) {
-				deleteCount = deleteFile(boardNum, kID);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
-		}
-		
-		
-		
-		return deleteCount;
-	}
 
 	public int deleteFile(int boardNum, int kID) {
 		int deleteCount = 0;
