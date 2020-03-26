@@ -91,6 +91,20 @@ public class BoardService {
 		return 0;
 	}
 
+	public int modifyArticle(BoardBean bb) {
+		System.out.println("BoardService의 modifyArticle() 메서드");
+
+		Connection con = null;
+		
+		BoardDAO boardDAO = BoardDAO.getInstance();
+		con = getConnection();
+		
+		int updateCount = 0;
+		
+		boardDAO.setConnection(con);
+		return updateCount;
+	}
+
 	
 
 	

@@ -61,6 +61,19 @@ public class BoardBean {
 		this.bookID = bookID;
 	}
 
+	
+
+	public BoardBean(int boardNum, String k1, String k2, String boardTitle, String boardContent,
+			List<FileBean> fileList) {
+		super();
+		this.boardNum = boardNum;
+		this.k1 = k1;
+		this.k2 = k2;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.fileList = fileList;
+	}
+
 
 
 	public int getBoardNum() {

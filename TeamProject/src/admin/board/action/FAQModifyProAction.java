@@ -1,6 +1,9 @@
 package admin.board.action;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Spliterator;
 
 import javax.servlet.ServletContext;
@@ -11,6 +14,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
+import admin.board.svc.BoardService;
 import admin.board.svc.FAQModifyProService;
 import vo.ActionForward;
 import vo.BoardBean;
@@ -20,50 +24,59 @@ public class FAQModifyProAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ActionForward forward = null;
+ActionForward forward = null;
 		
-		
-		// 멀티파트 정보 가져오기
-		// 글 수정을 위해 필요한 정보만 가져오기 글번호, 제목, 내용
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";
-				
+		
 		ServletContext context = request.getServletContext(); // request 객체로부터 컨텍스트 객체 가져오기
 		String realFolder = context.getRealPath(saveFolder); // 가상 위치로부터 실제 폴더 위치를 가져오기
-				
-		int maxSize=10*1024*1024; // 1024 비트(1키로바이트) * 1024 키로바이트(1메가바이트) * 10 => 10 메가바이트 
+		
+		BoardBean bb = null;
+		FileBean file = null; // 파일 정보를 저장할 변수 선언
+		List<FileBean> fileList = new ArrayList<FileBean>(); // BoardBean 객체에 담을 fileList 객체 생성
+		
+		int maxSize=20*1024*1024; // 1024 비트(1키로바이트) * 1024 키로바이트(1메가바이트) * 20 => 20 메가바이트 
 		MultipartRequest multi=new MultipartRequest(request,realFolder,maxSize,"utf-8",new DefaultFileRenamePolicy());
+		Enumeration files = multi.getFileNames();
 		
-		String originFilename = multi.getOriginalFileName((String)multi.getFileNames().nextElement());
-		String storedFileName = multi.getFilesystemName((String)multi.getFileNames().nextElement());
-		
-		String[] getFileType = originFilename.split(".");
-		String fileType = getFileType[getFileType.length - 1];
-		
-		System.out.println("원본 파일명(보여지는 이름) : " + originFilename);
-		System.out.println("저장된 파일명(중복처리) : " + storedFileName);
-		
+		while(files.hasMoreElements()) {
+			String name = (String)files.nextElement();
+			// 파일명 들고오기
+			String originFilename = multi.getOriginalFileName(name); //  원본 파일명, 보여지는 파일명이다.
+			String storedFileName = multi.getFilesystemName(name); // 저장되는 파일명, 중복처리를 거친 후 의 파일명이다.
+			
+			System.out.println("원본 파일명(보여지는 이름) : " + originFilename);
+			System.out.println("저장된 파일명(중복처리) : " + storedFileName);
+
+			String[] getFileType = originFilename.split("."); // 파일명 마지막의  확장자를 꺼내기 위하여 . 으로 문자열을 자름
+			String fileType = getFileType[getFileType.length - 1]; // 파일명 마지막이 .확장자로 끝나므로 끝 인덱스 값을 넣음
+			file = new FileBean(originFilename, storedFileName, fileType);
+			fileList.add(file);
+		}
+		// DB작업을 위해 서비스 객체 생성
+		BoardService boardService = new BoardService();
 		// 카테고리 관련
-		int boardNum = Integer.parseInt(multi.getParameter("boardNum"));
 		String k1 = multi.getParameter("k1");
-				
-		// 제목과 내용, 작성자
+		String k2 = multi.getParameter("k2");
+		// 글 번호 들고오기
+		int boardNum = Integer.parseInt(multi.getParameter("boardNum"));
+		
+		// 수정할 제목과 내용
 		String boardTitle = multi.getParameter("boardTitle");
 		String boardContent = multi.getParameter("boardContent");
 		
-		FileBean file = new  FileBean(originFilename, storedFileName, fileType);
 		// BoardBean 에 파라미터 저장 및 생성
-		BoardBean bb = new BoardBean(boardNum, k1, boardTitle, boardContent, file);
+		bb = new BoardBean(boardNum, k1, k2, boardTitle, boardContent, fileList);
 		
-		FAQModifyProService faq_ModifyProService = new FAQModifyProService();
+		// BoardBean 객체를 전달하여 서비스의 modifyArticle() 메서드를 실행하여  DB에 글을 수정하고, 성공 시 1을 반환받는다, 실패시 0을 반환
+		int updateCount = boardService.modifyArticle(bb);
 		
-		// 성공여부는 리턴받음
-		boolean isModifySuccess = false;
-		
-		isModifySuccess = faq_ModifyProService.modifyArticle(bb);
 		
 		forward = new ActionForward();
-		forward.setPath("./FAQDetail.adb?num"+boardNum);
+		// FAQ 는 작성한 것을 바로 리스트에서 볼 수 있도록 리스트로 이동한다.
+		// FAQ 작성한거 상세보기
+		forward.setPath("./FAQList.adb");
 		forward.setRedirect(true);
 		
 		return forward;
