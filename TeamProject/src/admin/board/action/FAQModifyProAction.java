@@ -1,5 +1,6 @@
 package admin.board.action;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -15,7 +16,6 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
 import admin.board.svc.BoardService;
-import admin.board.svc.FAQModifyProService;
 import vo.ActionForward;
 import vo.BoardBean;
 import vo.FileBean;
@@ -24,7 +24,7 @@ public class FAQModifyProAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-ActionForward forward = null;
+		ActionForward forward = null;
 		
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";
@@ -69,15 +69,36 @@ ActionForward forward = null;
 		// BoardBean 에 파라미터 저장 및 생성
 		bb = new BoardBean(boardNum, k1, k2, boardTitle, boardContent, fileList);
 		
+		// 삭제요청받은 파일 목록
+		List<String> deleteFileName = new ArrayList<String>();
+		for(int i = 0; request.getParameter("deleteFileName"+i) != null ; i++) {
+			deleteFileName.add(request.getParameter("deleteFileName" + i));
+		}
+		
 		// BoardBean 객체를 전달하여 서비스의 modifyArticle() 메서드를 실행하여  DB에 글을 수정하고, 성공 시 1을 반환받는다, 실패시 0을 반환
-		int updateCount = boardService.modifyArticle(bb);
+		int updateCount = boardService.modifyArticle(bb, deleteFileName);
 		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//1. 파일 변동이 없을 경우 파일관련 작업 없음
+		//
+		//2. 기존 파일 변동여부 와는 상관없이 새 파일 추가되었을 경우 새 파일을 추가
+		//
+		//3. 기존 파일 삭제 시 삭제된 파일이름 hidden으로 넘겨서 File.delete() 실행
 		
-		forward = new ActionForward();
-		// FAQ 는 작성한 것을 바로 리스트에서 볼 수 있도록 리스트로 이동한다.
-		// FAQ 작성한거 상세보기
-		forward.setPath("./FAQList.adb");
-		forward.setRedirect(true);
+		if(updateCount != 0) {
+			// 수정 성공시 삭제요청받은 기존 파일을 삭제해야함
+			// 삭제된 파일들을 삭제할 코드
+			for(String delFileName : deleteFileName) {
+				File df = new File(saveFolder + "/" + delFileName);		// 파일 찾기
+				df.delete();		// 파일 삭제
+			}
+			// 수정 성공 시 이동할 경로
+			
+			
+			
+		} else {
+			// 수정 실패 시 이동할 경로
+		}
 		
 		return forward;
 	}

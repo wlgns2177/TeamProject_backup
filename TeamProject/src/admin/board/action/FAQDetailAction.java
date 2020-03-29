@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import action.Action;
 import admin.board.svc.BoardService;
-import admin.board.svc.FAQDetailService;
 import vo.ActionForward;
 import vo.BoardBean;
 

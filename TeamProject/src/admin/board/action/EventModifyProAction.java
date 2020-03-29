@@ -1,6 +1,6 @@
 package admin.board.action;
 
-import java.sql.Timestamp;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -18,14 +18,11 @@ import vo.ActionForward;
 import vo.BoardBean;
 import vo.FileBean;
 
-public class EventWriteProAction implements Action {
+public class EventModifyProAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ActionForward forward = null;
-		
-		// 리퀘스트 한글처리
-		request.setCharacterEncoding("UTF-8");
 		
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";
@@ -46,7 +43,7 @@ public class EventWriteProAction implements Action {
 			// 파일명 들고오기
 			String originFilename = multi.getOriginalFileName(name); //  원본 파일명, 보여지는 파일명이다.
 			String storedFileName = multi.getFilesystemName(name); // 저장되는 파일명, 중복처리를 거친 후 의 파일명이다.
-
+			
 			System.out.println("원본 파일명(보여지는 이름) : " + originFilename);
 			System.out.println("저장된 파일명(중복처리) : " + storedFileName);
 
@@ -61,28 +58,45 @@ public class EventWriteProAction implements Action {
 		String k1 = multi.getParameter("k1");
 		String k2 = multi.getParameter("k2");
 		// 글 번호 들고오기
-		int boardNum = boardService.getMaxNum(k1) + 1;
+		int boardNum = Integer.parseInt(multi.getParameter("boardNum"));
 		
-		// 제목과 내용, 작성자
-		String boardWriter = multi.getParameter("boardWriter");
+		// 수정할 제목과 내용
 		String boardTitle = multi.getParameter("boardTitle");
 		String boardContent = multi.getParameter("boardContent");
 		
-		// 작성일, 그룹번호, 글 레벨(답글 확인), 글 순서(답글 순서), 조회수, 상품 ID(상품 문의, 후기용)
-		Timestamp boardRegTime = new Timestamp(System.currentTimeMillis());
-		int boardReRef = Integer.parseInt(multi.getParameter("boardReRef"));
-		int boardReLev = Integer.parseInt(multi.getParameter("boardReLev"));
-		int boardReSeq = Integer.parseInt(multi.getParameter("boardReSeq"));
-		int boardReadcount = 0;
-		int bookID = Integer.parseInt(multi.getParameter("bookID"));
 		// BoardBean 에 파라미터 저장 및 생성
-		bb = new BoardBean(boardNum, k1, k2, boardWriter, boardTitle, boardContent, boardRegTime, boardReRef, boardReLev, boardReSeq, boardReadcount, bookID, fileList);
+		bb = new BoardBean(boardNum, k1, k2, boardTitle, boardContent, fileList);
 		
-		// BoardBean 객체를 전달하여 서비스의 writeArticle() 메서드를 실행하여  DB에 글을 삽입하고, 성공 시 1을 반환받는다, 실패시 0을 반환
-		int insertCount = boardService.writeArticle(bb);
+		// 삭제요청받은 파일 목록
+		List<String> deleteFileName = new ArrayList<String>();
+		for(int i = 0; request.getParameter("deleteFileName"+i) != null ; i++) {
+			deleteFileName.add(request.getParameter("deleteFileName" + i));
+		}
 		
-		forward = new ActionForward();
-		// Event 포워드 지정
+		// BoardBean 객체를 전달하여 서비스의 modifyArticle() 메서드를 실행하여  DB에 글을 수정하고, 성공 시 1을 반환받는다, 실패시 0을 반환
+		int updateCount = boardService.modifyArticle(bb, deleteFileName);
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//1. 파일 변동이 없을 경우 파일관련 작업 없음
+		//
+		//2. 기존 파일 변동여부 와는 상관없이 새 파일 추가되었을 경우 새 파일을 추가
+		//
+		//3. 기존 파일 삭제 시 삭제된 파일이름 hidden으로 넘겨서 File.delete() 실행
+		
+		if(updateCount != 0) {
+			// 수정 성공시 삭제요청받은 기존 파일을 삭제해야함
+			// 삭제된 파일들을 삭제할 코드
+			for(String delFileName : deleteFileName) {
+				File df = new File(saveFolder + "/" + delFileName);		// 파일 찾기
+				df.delete();		// 파일 삭제
+			}
+			// 수정 성공 시 이동할 경로
+			
+			
+			
+		} else {
+			// 수정 실패 시 이동할 경로
+		}
 		
 		return forward;
 	}

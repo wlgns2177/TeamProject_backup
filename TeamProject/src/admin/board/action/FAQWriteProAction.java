@@ -1,5 +1,6 @@
 package admin.board.action;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -14,7 +15,6 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
 import admin.board.svc.BoardService;
-import admin.board.svc.FAQWriteProService;
 import vo.ActionForward;
 import vo.BoardBean;
 import vo.FileBean;
@@ -24,6 +24,9 @@ public class FAQWriteProAction implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ActionForward forward = null;
+		
+		// 리퀘스트 한글처리
+		request.setCharacterEncoding("UTF-8");
 		
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";
@@ -47,6 +50,8 @@ public class FAQWriteProAction implements Action {
 			
 			System.out.println("원본 파일명(보여지는 이름) : " + originFilename);
 			System.out.println("저장된 파일명(중복처리) : " + storedFileName);
+			
+//			File ioFile = new File(saveFolder + "/" + storedFileName);
 
 			String[] getFileType = originFilename.split("."); // 파일명 마지막의  확장자를 꺼내기 위하여 . 으로 문자열을 자름
 			String fileType = getFileType[getFileType.length - 1]; // 파일명 마지막이 .확장자로 끝나므로 끝 인덱스 값을 넣음

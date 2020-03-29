@@ -6,6 +6,7 @@ import static db.JdbcUtil.getConnection;
 import static db.JdbcUtil.rollback;
 
 import java.sql.Connection;
+import java.util.List;
 
 import org.apache.catalina.startup.SetContextPropertiesRule;
 
@@ -91,7 +92,7 @@ public class BoardService {
 		return 0;
 	}
 
-	public int modifyArticle(BoardBean bb) {
+	public int modifyArticle(BoardBean bb, List<String> deleteFileName) {
 		System.out.println("BoardService의 modifyArticle() 메서드");
 
 		Connection con = null;
@@ -102,6 +103,17 @@ public class BoardService {
 		int updateCount = 0;
 		
 		boardDAO.setConnection(con);
+		
+		updateCount = boardDAO.updateArticle(bb, deleteFileName);
+		
+		if(updateCount != 0) {
+			System.out.println("수정성공");
+			commit(con);
+		} else {
+			System.out.println("수정 실패");
+			rollback(con);
+		}
+		
 		return updateCount;
 	}
 

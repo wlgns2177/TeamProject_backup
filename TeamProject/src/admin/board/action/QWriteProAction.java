@@ -23,7 +23,10 @@ public class QWriteProAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-ActionForward forward = null;
+		ActionForward forward = null;
+		
+		// 리퀘스트 한글처리
+		request.setCharacterEncoding("UTF-8");
 		
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";

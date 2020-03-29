@@ -14,7 +14,6 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import action.Action;
 import admin.board.svc.BoardService;
-import admin.board.svc.NoticeWriteProService;
 import vo.ActionForward;
 import vo.BoardBean;
 import vo.FileBean;
@@ -23,7 +22,10 @@ public class NoticeWriteProAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-ActionForward forward = null;
+		ActionForward forward = null;
+		
+		// 리퀘스트 한글처리
+		request.setCharacterEncoding("UTF-8");
 		
 		// MultipartRequest 객체생성
 		String saveFolder ="/boardFile";

@@ -7,7 +7,7 @@ import action.Action;
 import admin.board.svc.BoardService;
 import vo.ActionForward;
 
-public class QDeleteProAction implements Action {
+public class EventDeleteAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

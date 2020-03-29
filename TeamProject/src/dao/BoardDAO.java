@@ -299,7 +299,7 @@ public class BoardDAO {
 				
 				int delete = pstmt.executeUpdate();
 				if(delete != 0) {
-					deleteCount = deleteFile(boardNum, kID);
+					deleteCount = deleteAllFile(boardNum, kID);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -335,52 +335,54 @@ public class BoardDAO {
 	//
 	// 글 수정하는 메서드들
 
-	public int updateArticle(BoardBean bb) {
+	public int updateArticle(BoardBean bb, List<String> deleteFileName) {
 		int updateCount = 0;
 		
-		int kID = get_kID(bb.getBoardNum(), bb.getK1());
-		String sql = "UPDATE board SET boardTitle=?, boardContent=? WHERE boardNum=? AND kID=?";
+		int kID = get_kID(bb.getK1(), bb.getK2());
+		int delFile = deleteFile(bb, deleteFileName, kID);
 		
-		try {
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, bb.getBoardTitle()); pstmt.setString(2, bb.getBoardContent());
-			pstmt.setInt(3, bb.getBoardNum()); pstmt.setInt(4, kID);
+		if(delFile != 0) {
+			String sql = "UPDATE board SET boardTitle=?, boardContent=? WHERE boardNum=? AND kID=?";
 			
-			updateCount = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, bb.getBoardTitle()); pstmt.setString(2, bb.getBoardContent());
+				pstmt.setInt(3, bb.getBoardNum()); pstmt.setInt(4, kID);
+				
+				updateCount = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(pstmt);
+			}
 		}
+		
 		
 		return updateCount;
 	}
 
-	
-	
-	
-	
-
-	public int deleteFile(int boardNum, int kID) {
+	public int deleteFile(BoardBean bb, List<String> deleteFileName, int kID) {
 		int deleteCount = 0;
 		
-		String sql = "SELECT * FROM fileBoard WHERE board_boardNum=? AND board_kID=?";
-		try {
-			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				sql = "DELETE FROM fileBoard WHERE board_boardNum=? AND board_kID=?";
+		String sql = "DELETE FROM boardFile WHERE storedFileName=? ADN board_boardNum=? AND board_kID=?";
+		
+		for(String delFileName : deleteFileName) {
+			try {
 				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, boardNum); pstmt.setInt(2, kID);
-				deleteCount = pstmt.executeUpdate();
-			} else {
-				deleteCount = 1;
+				pstmt.setString(1, delFileName);
+				pstmt.setInt(2, bb.getBoardNum());
+				pstmt.setInt(3, kID);
+				
+				deleteCount += pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				close(pstmt);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
+		}
+		
+		if(deleteCount != deleteFileName.size()) {
+			deleteCount = 0;
 		}
 		
 		return deleteCount;
