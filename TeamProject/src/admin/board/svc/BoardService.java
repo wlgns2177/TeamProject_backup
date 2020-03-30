@@ -6,6 +6,7 @@ import static db.JdbcUtil.getConnection;
 import static db.JdbcUtil.rollback;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.catalina.startup.SetContextPropertiesRule;
@@ -117,6 +118,46 @@ public class BoardService {
 		return updateCount;
 	}
 
+	
+	public static int getListCount() {
+		int listCount = 0;
+		
+		// 1. Connection 객체 가져오기
+		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
+				
+		// 2. DAO 객체 가져오기(싱글톤 패턴)
+		BoardDAO boardDAO = BoardDAO.getInstance();
+				
+		// 3. DAO 객체에 Connection 객체 전달하기
+		boardDAO.setConnection(con);
+		
+		// 4. DAO 객체의 getListCount() 메서드 실행
+//		listCount = boardDAO.selectListCount();
+		
+		// 5. Connection 객체 반환하기
+		close(con);
+		
+		return listCount;
+	}
+
+	public ArrayList<BoardBean> getArticleList(int page, int limit) {
+		ArrayList<BoardBean> articleList = null;
+		// 1. Connection 객체 가져오기
+		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
+						
+		// 2. DAO 객체 가져오기(싱글톤 패턴)
+		BoardDAO boardDAO = BoardDAO.getInstance();
+						
+		// 3. DAO 객체에 Connection 객체 전달하기
+		boardDAO.setConnection(con);
+				
+		// 4. DAO 객체의 selectArticleList() 메서드 실행
+		articleList = boardDAO.selectArticleList(page, limit);
+		
+		// 5. Connection 객체 반환하기
+		close(con);
+		return articleList;
+	}
 	
 
 	
