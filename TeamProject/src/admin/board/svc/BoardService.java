@@ -13,6 +13,7 @@ import org.apache.catalina.startup.SetContextPropertiesRule;
 
 import dao.BoardDAO;
 import vo.BoardBean;
+import vo.PageInfo;
 
 public class BoardService {
 
@@ -119,7 +120,7 @@ public class BoardService {
 	}
 
 	
-	public static int getListCount() {
+	public int getListCount(String k1, String k2) {
 		int listCount = 0;
 		
 		// 1. Connection 객체 가져오기
@@ -132,7 +133,7 @@ public class BoardService {
 		boardDAO.setConnection(con);
 		
 		// 4. DAO 객체의 getListCount() 메서드 실행
-//		listCount = boardDAO.selectListCount();
+		listCount = boardDAO.selectListCount(k1, k2);
 		
 		// 5. Connection 객체 반환하기
 		close(con);
@@ -140,7 +141,7 @@ public class BoardService {
 		return listCount;
 	}
 
-	public ArrayList<BoardBean> getArticleList(int page, int limit) {
+	public ArrayList<BoardBean> getArticleList(PageInfo pageInfo) {
 		ArrayList<BoardBean> articleList = null;
 		// 1. Connection 객체 가져오기
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
@@ -152,7 +153,7 @@ public class BoardService {
 		boardDAO.setConnection(con);
 				
 		// 4. DAO 객체의 selectArticleList() 메서드 실행
-		articleList = boardDAO.selectArticleList(page, limit);
+		articleList = boardDAO.selectArticleList(pageInfo);
 		
 		// 5. Connection 객체 반환하기
 		close(con);

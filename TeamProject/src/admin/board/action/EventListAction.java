@@ -11,7 +11,7 @@ import vo.ActionForward;
 import vo.BoardBean;
 import vo.PageInfo;
 
-public class FAQListAction implements Action {
+public class EventListAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -27,7 +27,7 @@ public class FAQListAction implements Action {
 		if(request.getParameter("page") != null) {
 			page = Integer.parseInt(request.getParameter("page")); // 정수로 변환하여 저장
 		}
-		String k1 = "FAQ";
+		String k1 = "EVENT";
 		String k2 = request.getParameter("k2");
 		
 		// BoardListService 인스턴스 생성 후 게시물 목록 갯수 가져오기
@@ -66,7 +66,8 @@ public class FAQListAction implements Action {
 		request.setAttribute("pageInfo", pageInfo);
 		
 		forward = new ActionForward();
-		forward.setPath("./board/FAQList.jsp");
+		// 이벤트로 고칠것
+//		forward.setPath("./board/FAQList.jsp");
 		
 		return forward;
 	}
