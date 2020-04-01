@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,8 +35,13 @@ public class BoardDAO {
 	// ************카테고리 번호(kID) 를 가져오는 메서드 get_kId
 		public int get_kID(String k1, String k2) {
 			int kID = -1;
+			String sql = "";
 			
-			String sql = "SELECT kID FROM kategorie Where k1=? and k2=?";
+			if(k2 != null) {
+				sql = "SELECT kID FROM kategorie Where k1=? and k2=?";
+			} else {
+				sql = "SELECT kID FROM kategorie WHERE k1=? and k2<=>?";
+			}
 			try {
 				pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, k1);
@@ -87,8 +93,7 @@ public class BoardDAO {
 		int insertCount = 0;
 		
 		int kID = get_kID(bb.getK1(), bb.getK2()); //  1:1 문의 답변 용으로 따로 체크해야함
-		String sql = "INSERT INTO board values(boardNum, kID, boardWriter, boardTitle,"
-				+ " boardContent, boardRegTime, boardReRef, boardReLev, boardReSeq, boardReadcount, bookID)";
+		String sql = "INSERT INTO board values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -389,6 +394,14 @@ public class BoardDAO {
 		return deleteCount;
 	}
 
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 	
 	// 글 목록 관련 메서드
 	
@@ -396,16 +409,19 @@ public class BoardDAO {
 	public int selectListCount(String k1, String k2) {
 		int listCount = 0;
 		String sql = "";
+		int kID = get_kID(k1, k2);
 		
-		if(k2 != null) {
-			sql = "SELECT count(*) FROM board Where k1=? AND k2=?";
-		} else {
-			sql = "SELECT count(*) FROM board WHERE k1=?";
-		}
 		try {
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, k1);
-			if(k2 != null) { pstmt.setString(2, k2); }
+			if(k2 != null) {
+				sql = "SELECT count(*) FROM board kID=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, kID);
+			} else {
+				sql = "SELECT count(*) FROM board WHERE kID IN (SELECT kID FROM kategorie WHERE k1=?)";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, k1);
+			}
+			
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				listCount = rs.getInt(1);
@@ -455,7 +471,6 @@ public class BoardDAO {
 				pstmt.setInt(2, startRow); pstmt.setInt(3, limit);
 			}
             rs = pstmt.executeQuery();
-            
             // ResultSet 객체 내의 모든 레코드를 각각 레코드별로 BoardBean 에 담아서 ArrayList 객체에 저장
             // => 패스워드 제외
             while(rs.next()) {
@@ -481,6 +496,35 @@ public class BoardDAO {
 		}
 		
 		return articleList;
+	}
+	
+	
+	// 미답변 글 용 메서드
+	
+	public int selectNAListCount(String k1, String k2) {
+		int listCount = 0;
+		String sql = "";
+		
+		if(k2 != null) {
+			sql = "SELECT count(*) FROM board Where k1=? AND k2=?";
+		} else {
+			sql = "SELECT count(*) FROM board WHERE k1=?";
+		}
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, k1);
+			if(k2 != null) { pstmt.setString(2, k2); }
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				listCount = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs); close(pstmt);
+		}
+		
+		return listCount;
 	}
 
 	

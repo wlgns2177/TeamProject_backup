@@ -159,6 +159,30 @@ public class BoardService {
 		close(con);
 		return articleList;
 	}
+
+	
+	
+	// 미답변 글 갯수 가져오기
+	public int getNAListCount(String k1, String k2) {
+		int listCount = 0;
+		
+		// 1. Connection 객체 가져오기
+		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
+				
+		// 2. DAO 객체 가져오기(싱글톤 패턴)
+		BoardDAO boardDAO = BoardDAO.getInstance();
+				
+		// 3. DAO 객체에 Connection 객체 전달하기
+		boardDAO.setConnection(con);
+		
+		// 4. DAO 객체의 getListCount() 메서드 실행
+		listCount = boardDAO.selectNAListCount(k1, k2);
+		
+		// 5. Connection 객체 반환하기
+		close(con);
+		
+		return listCount;
+	}
 	
 
 	
