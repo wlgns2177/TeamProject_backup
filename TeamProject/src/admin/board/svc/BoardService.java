@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.catalina.startup.SetContextPropertiesRule;
 
-import dao.BoardDAO;
+import dao.AdminBoardDAO;
 import vo.BoardBean;
 import vo.PageInfo;
 
@@ -22,7 +22,7 @@ public class BoardService {
 		System.out.println("BoardService의 getMaxNum() 메서드");
 		Connection con = null;
 		// BoardDAO 객체 생성(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 		// DB 연결
 		con = getConnection();
 		boardDAO.setConnection(con);
@@ -38,7 +38,7 @@ public class BoardService {
 		System.out.println("BoardService의 writeArticle() 메서드");
 		Connection con = null;
 		// BoardDAO 객체 생성(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 		// DB 연결
 		con = getConnection();
 		boardDAO.setConnection(con);
@@ -65,7 +65,7 @@ public class BoardService {
 		//
 		Connection con = null;
 		// BoardDAO 객체 생성(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 		// DB 연결
 		con = getConnection();
 		boardDAO.setConnection(con);
@@ -83,7 +83,7 @@ public class BoardService {
 		BoardBean bb = null;
 		Connection con = null;
 		
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 		con = getConnection();
 		
 		boardDAO.setConnection(con);
@@ -99,7 +99,7 @@ public class BoardService {
 
 		Connection con = null;
 		
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 		con = getConnection();
 		
 		int updateCount = 0;
@@ -127,7 +127,7 @@ public class BoardService {
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
 				
 		// 2. DAO 객체 가져오기(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 				
 		// 3. DAO 객체에 Connection 객체 전달하기
 		boardDAO.setConnection(con);
@@ -147,7 +147,7 @@ public class BoardService {
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
 						
 		// 2. DAO 객체 가져오기(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 						
 		// 3. DAO 객체에 Connection 객체 전달하기
 		boardDAO.setConnection(con);
@@ -170,7 +170,7 @@ public class BoardService {
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
 				
 		// 2. DAO 객체 가져오기(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 				
 		// 3. DAO 객체에 Connection 객체 전달하기
 		boardDAO.setConnection(con);
@@ -190,7 +190,7 @@ public class BoardService {
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
 						
 		// 2. DAO 객체 가져오기(싱글톤 패턴)
-		BoardDAO boardDAO = BoardDAO.getInstance();
+		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
 						
 		// 3. DAO 객체에 Connection 객체 전달하기
 		boardDAO.setConnection(con);
