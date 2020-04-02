@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import vo.BoardBean;
+import vo.BoardBean2;
 import vo.FileBean;
 import vo.PageInfo;
 
@@ -89,7 +89,7 @@ public class AdminBoardDAO {
 	//
 	//  글 작성
 	
-	public int insertArticle(BoardBean bb) {
+	public int insertArticle(BoardBean2 bb) {
 		int insertCount = 0;
 		
 		int kID = get_kID(bb.getK1(), bb.getK2()); //  1:1 문의 답변 용으로 따로 체크해야함
@@ -120,7 +120,7 @@ public class AdminBoardDAO {
 	
 	
 	// 글 쓸때 파일을 같이 업로드 하는 insertFile 메서드
-	public int insertFile(BoardBean  bb, int kID) {
+	public int insertFile(BoardBean2  bb, int kID) {
 		int insertCount = 0;
 		int count = 0;
 		int listSize = bb.getFileList().size();
@@ -163,8 +163,8 @@ public class AdminBoardDAO {
 	//-------------------------------------------------------------------------------
 	// 글 내용 보는 메서드들
 	
-	public BoardBean selectArticle(int boardNum, String k1, String k2) {
-		BoardBean bb = null;
+	public BoardBean2 selectArticle(int boardNum, String k1, String k2) {
+		BoardBean2 bb = null;
 		int kID = get_kID(k1, k2);
 		
 		String sql = "SELECT * FROM board WHERE boardNum=? AND kID=?";
@@ -175,7 +175,7 @@ public class AdminBoardDAO {
 			rs = pstmt.executeQuery();
 			
 			if(rs != null) {
-				bb = new BoardBean(rs.getInt("boardNum"), rs.getString("k1"), rs.getString("k2"),
+				bb = new BoardBean2(rs.getInt("boardNum"), rs.getString("k1"), rs.getString("k2"),
 						rs.getString("boardWriter"), rs.getString("boardTitle"), rs.getString("boardContent"),
 						rs.getTimestamp("boardRegTime"), rs.getInt("boardReRef"), rs.getInt("boardReLev"),
 						rs.getInt("boardReSeq"), rs.getInt("boardReadcount"), rs.getInt("bookID"));
@@ -341,7 +341,7 @@ public class AdminBoardDAO {
 	//
 	// 글 수정하는 메서드들
 
-	public int updateArticle(BoardBean bb, List<String> deleteFileName) {
+	public int updateArticle(BoardBean2 bb, List<String> deleteFileName) {
 		int updateCount = 0;
 		
 		int kID = get_kID(bb.getK1(), bb.getK2());
@@ -367,7 +367,7 @@ public class AdminBoardDAO {
 		return updateCount;
 	}
 
-	public int deleteFile(BoardBean bb, List<String> deleteFileName, int kID) {
+	public int deleteFile(BoardBean2 bb, List<String> deleteFileName, int kID) {
 		int deleteCount = 0;
 		
 		String sql = "DELETE FROM boardFile WHERE storedFileName=? ADN board_boardNum=? AND board_kID=?";
@@ -435,9 +435,9 @@ public class AdminBoardDAO {
 		return listCount;
 	}
 	
-	public ArrayList<BoardBean> selectArticleList(PageInfo pageInfo) {
+	public ArrayList<BoardBean2> selectArticleList(PageInfo pageInfo) {
 		// 게시물 목록 조회 후 리턴
-		ArrayList<BoardBean> articleList = new ArrayList<BoardBean>();
+		ArrayList<BoardBean2> articleList = new ArrayList<BoardBean2>();
 		
 		int page = pageInfo.getPage();
 		int limit = pageInfo.getLimit();
@@ -474,7 +474,7 @@ public class AdminBoardDAO {
             // ResultSet 객체 내의 모든 레코드를 각각 레코드별로 BoardBean 에 담아서 ArrayList 객체에 저장
             // => 패스워드 제외
             while(rs.next()) {
-                BoardBean boardBean = new BoardBean();
+                BoardBean2 boardBean = new BoardBean2();
                 boardBean.setBoardNum(rs.getInt("boardNum"));
                 boardBean.setBoardWriter(rs.getString("boardWriter"));
                 boardBean.setBoardTitle(rs.getString("boarTitle"));
@@ -536,9 +536,9 @@ public class AdminBoardDAO {
 		return listCount;
 	}
 
-	public ArrayList<BoardBean> selectArticleNAList(PageInfo pageInfo) {
+	public ArrayList<BoardBean2> selectArticleNAList(PageInfo pageInfo) {
 		// 게시물 목록 조회 후 리턴
-		ArrayList<BoardBean> articleList = new ArrayList<BoardBean>();
+		ArrayList<BoardBean2> articleList = new ArrayList<BoardBean2>();
 		
 		int page = pageInfo.getPage();
 		int limit = pageInfo.getLimit();
@@ -577,7 +577,7 @@ public class AdminBoardDAO {
             // ResultSet 객체 내의 모든 레코드를 각각 레코드별로 BoardBean 에 담아서 ArrayList 객체에 저장
             // => 패스워드 제외
             while(rs.next()) {
-                BoardBean boardBean = new BoardBean();
+                BoardBean2 boardBean = new BoardBean2();
                 boardBean.setBoardNum(rs.getInt("boardNum"));
                 boardBean.setBoardWriter(rs.getString("boardWriter"));
                 boardBean.setBoardTitle(rs.getString("boarTitle"));

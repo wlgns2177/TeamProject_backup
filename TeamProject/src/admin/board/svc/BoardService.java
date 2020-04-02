@@ -12,7 +12,7 @@ import java.util.List;
 import org.apache.catalina.startup.SetContextPropertiesRule;
 
 import dao.AdminBoardDAO;
-import vo.BoardBean;
+import vo.BoardBean2;
 import vo.PageInfo;
 
 public class BoardService {
@@ -34,7 +34,7 @@ public class BoardService {
 	}
 
 	// 글을 작성하는 메서드
-	public int writeArticle(BoardBean bb) {
+	public int writeArticle(BoardBean2 bb) {
 		System.out.println("BoardService의 writeArticle() 메서드");
 		Connection con = null;
 		// BoardDAO 객체 생성(싱글톤 패턴)
@@ -58,10 +58,10 @@ public class BoardService {
 	}
 
 	// 글 정보를 가져오는 메서드
-	public BoardBean getArticle(int boardNum, String k1, String k2) {
+	public BoardBean2 getArticle(int boardNum, String k1, String k2) {
 		System.out.println("BoardService의 getArticle() 메서드");
 		// 객체 반환을 위한 BoardBean 객체 선언
-		BoardBean bb = null;
+		BoardBean2 bb = null;
 		//
 		Connection con = null;
 		// BoardDAO 객체 생성(싱글톤 패턴)
@@ -80,7 +80,7 @@ public class BoardService {
 	public int deleteArticle(int boardNum, String k1, String k2) {
 		System.out.println("BoardService의 deleteArticle() 메서드");
 		
-		BoardBean bb = null;
+		BoardBean2 bb = null;
 		Connection con = null;
 		
 		AdminBoardDAO boardDAO = AdminBoardDAO.getInstance();
@@ -94,7 +94,7 @@ public class BoardService {
 		return 0;
 	}
 
-	public int modifyArticle(BoardBean bb, List<String> deleteFileName) {
+	public int modifyArticle(BoardBean2 bb, List<String> deleteFileName) {
 		System.out.println("BoardService의 modifyArticle() 메서드");
 
 		Connection con = null;
@@ -141,8 +141,8 @@ public class BoardService {
 		return listCount;
 	}
 
-	public ArrayList<BoardBean> getArticleList(PageInfo pageInfo) {
-		ArrayList<BoardBean> articleList = null;
+	public ArrayList<BoardBean2> getArticleList(PageInfo pageInfo) {
+		ArrayList<BoardBean2> articleList = null;
 		// 1. Connection 객체 가져오기
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
 						
@@ -184,8 +184,8 @@ public class BoardService {
 		return listCount;
 	}
 
-	public ArrayList<BoardBean> getArticleNAList(PageInfo pageInfo) {
-		ArrayList<BoardBean> articleList = null;
+	public ArrayList<BoardBean2> getArticleNAList(PageInfo pageInfo) {
+		ArrayList<BoardBean2> articleList = null;
 		// 1. Connection 객체 가져오기
 		Connection con = getConnection(); // static import 가 아니라면  jdbcUtill.으로 호출(스태틱 메서드 호출 시)
 						

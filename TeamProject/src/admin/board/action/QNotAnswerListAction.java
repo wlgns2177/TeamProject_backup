@@ -9,7 +9,7 @@ import action.Action;
 import admin.board.svc.BoardService;
 import board.svc.QListService;
 import vo.ActionForward;
-import vo.BoardBean;
+import vo.BoardBean2;
 import vo.PageInfo;
 
 public class QNotAnswerListAction implements Action {
@@ -42,7 +42,7 @@ public class QNotAnswerListAction implements Action {
 //		 BoardListService 객체의 getArticleList() 메서드를 호출 하여 게시물 목록 가져오기
 		// => 파라미터로 현재 페이지(page) 와 게시물 수(limit) 를 전달
 		// => ArrayList<BoardBean> 타입 객체 리턴
-		ArrayList<BoardBean> articleList = boardService.getArticleList(pageInfo);
+		ArrayList<BoardBean2> articleList = boardService.getArticleList(pageInfo);
 		// 가져온 게시물 목록 리퀘스트에 저장
 		request.setAttribute("articleList", articleList);
 		

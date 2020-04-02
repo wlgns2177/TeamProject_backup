@@ -3,7 +3,7 @@ package vo;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class BoardBean {
+public class BoardBean2 {
 	
 	private int boardNum;
 	private String k1;
@@ -21,11 +21,11 @@ public class BoardBean {
 	
 	private List<FileBean> fileList;
 	
-	public BoardBean() {}
+	public BoardBean2() {}
 	
 	
 
-	public BoardBean(int boardNum, String k1, String k2, String boardWriter, String boardTitle, String boardContent,
+	public BoardBean2(int boardNum, String k1, String k2, String boardWriter, String boardTitle, String boardContent,
 			Timestamp boardRegTime, int boardReRef, int boardReLev, int boardReSeq, int boardReadcount, int bookID,
 			List<FileBean> fileList) {
 		super();
@@ -44,7 +44,7 @@ public class BoardBean {
 		this.fileList = fileList;
 	}
 	
-	public BoardBean(int boardNum, String k1, String k2, String boardWriter, String boardTitle, String boardContent,
+	public BoardBean2(int boardNum, String k1, String k2, String boardWriter, String boardTitle, String boardContent,
 			Timestamp boardRegTime, int boardReRef, int boardReLev, int boardReSeq, int boardReadcount, int bookID) {
 		super();
 		this.boardNum = boardNum;
@@ -63,7 +63,7 @@ public class BoardBean {
 
 	
 
-	public BoardBean(int boardNum, String k1, String k2, String boardTitle, String boardContent,
+	public BoardBean2(int boardNum, String k1, String k2, String boardTitle, String boardContent,
 			List<FileBean> fileList) {
 		super();
 		this.boardNum = boardNum;

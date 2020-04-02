@@ -15,7 +15,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import action.Action;
 import admin.board.svc.BoardService;
 import vo.ActionForward;
-import vo.BoardBean;
+import vo.BoardBean2;
 import vo.FileBean;
 
 public class EventModifyFormAction implements Action {
@@ -30,7 +30,7 @@ public class EventModifyFormAction implements Action {
 		String k2 = request.getParameter("k2");
 		// DB 작업을 위한 BoardService 객체와 글 정보를 담아올 BoardBean 객체 선언
 		BoardService boardService = new BoardService();
-		BoardBean bb = null;
+		BoardBean2 bb = null;
 		// BoardService 객체의 getArticle() 메서드를 호출(BoardBean 객체 반환)
 		bb = boardService.getArticle(boardNum, k1, k2);
 		

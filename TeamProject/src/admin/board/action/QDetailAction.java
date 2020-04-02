@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import action.Action;
 import admin.board.svc.BoardService;
 import vo.ActionForward;
-import vo.BoardBean;
+import vo.BoardBean2;
 
 public class QDetailAction implements Action {
 
@@ -20,7 +20,7 @@ ActionForward forward = null;
 		String k2 = request.getParameter("k2");
 		// DB 작업을 위한 BoardService 객체와 글 정보를 담아올 BoardBean 객체 선언
 		BoardService boardService = new BoardService();
-		BoardBean bb = null;
+		BoardBean2 bb = null;
 		// BoardService 객체의 getArticle() 메서드를 호출(BoardBean 객체 반환)
 		bb = boardService.getArticle(boardNum, k1, k2);
 		

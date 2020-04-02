@@ -16,7 +16,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import action.Action;
 import admin.board.svc.BoardService;
 import vo.ActionForward;
-import vo.BoardBean;
+import vo.BoardBean2;
 import vo.FileBean;
 
 public class FAQWriteProAction implements Action {
@@ -34,7 +34,7 @@ public class FAQWriteProAction implements Action {
 		ServletContext context = request.getServletContext(); // request 객체로부터 컨텍스트 객체 가져오기
 		String realFolder = context.getRealPath(saveFolder); // 가상 위치로부터 실제 폴더 위치를 가져오기
 		
-		BoardBean bb = null;
+		BoardBean2 bb = null;
 		FileBean file = null; // 파일 정보를 저장할 변수 선언
 		List<FileBean> fileList = new ArrayList<FileBean>(); // BoardBean 객체에 담을 fileList 객체 생성
 		
@@ -79,7 +79,7 @@ public class FAQWriteProAction implements Action {
 		int boardReadcount = 0;
 		int bookID = Integer.parseInt(multi.getParameter("bookID"));
 		// BoardBean 에 파라미터 저장 및 생성
-		bb = new BoardBean(boardNum, k1, k2, boardWriter, boardTitle, boardContent, boardRegTime, boardReRef, boardReLev, boardReSeq, boardReadcount, bookID, fileList);
+		bb = new BoardBean2(boardNum, k1, k2, boardWriter, boardTitle, boardContent, boardRegTime, boardReRef, boardReLev, boardReSeq, boardReadcount, bookID, fileList);
 		
 		// BoardBean 객체를 전달하여 서비스의 writeArticle() 메서드를 실행하여  DB에 글을 삽입하고, 성공 시 1을 반환받는다, 실패시 0을 반환
 		int insertCount = boardService.writeArticle(bb);
